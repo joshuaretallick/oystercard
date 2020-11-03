@@ -48,6 +48,10 @@ describe Oystercard do
       expect{ oystercard.touch_out }.to change{ oystercard.balance }.by(-Oystercard::MINIMUM_FARE)
     end
 
+    it "raises an exception if user hasn't touched in but tries to touch out" do
+      expect{ oystercard.touch_out }.to raise_error "You need to touch in first!"
+    end
+
   end
 
 end

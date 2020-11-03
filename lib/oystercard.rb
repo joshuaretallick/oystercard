@@ -26,6 +26,7 @@ class Oystercard
   end
 
   def touch_out
+    raise "You need to touch in first!" if in_journey == false
     @in_journey = false
     deduct(MINIMUM_FARE)
   end
