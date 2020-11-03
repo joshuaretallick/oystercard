@@ -8,7 +8,6 @@ describe Oystercard do
       expect(oystercard.balance).to eq 0
     end
 
-
     it "should return a balance of £10 when top up £10" do
       expect{ oystercard.top_up(10) }.to change{ oystercard.balance }.by(10)
     end
@@ -30,15 +29,22 @@ describe Oystercard do
     end
 
     it "can touch in" do
+      oystercard.top_up(2)
       oystercard.touch_in
       expect(oystercard).to be_in_journey
     end
 
     it "can touch out" do
+      oystercard.top_up(2)
       oystercard.touch_in
       oystercard.touch_out
       expect(oystercard).not_to be_in_journey
     end
+
+    it "throws an error when touch_in if balance < 1" do
+      expect{ oystercard.touch_in }.to raise_error "Insufficient Funds!"
+    end
+
   end
 
 end
