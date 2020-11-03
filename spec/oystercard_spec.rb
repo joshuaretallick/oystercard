@@ -18,9 +18,6 @@ describe Oystercard do
       expect{ oystercard.top_up(1) }.to raise_error "Maximum balance if £#{maximum_balance} exceeded"
     end
 
-    it "should reduce balance by £5 when deduct £5" do
-      expect{ oystercard.deduct(5) }.to change{ oystercard.balance }.by(-5)
-    end
   end
 
   context "The user begins his/her journey" do
@@ -41,8 +38,14 @@ describe Oystercard do
       expect(oystercard).not_to be_in_journey
     end
 
-    it "throws an error when touch_in if balance < MINIMUM_BALANCE" do
+    it "throws an error when touch_in if balance < MINIMUM_FARE" do
       expect{ oystercard.touch_in }.to raise_error "Insufficient Funds!"
+    end
+
+    it "deducts fare amount when user touches out" do
+      oystercard.top_up(2)
+      oystercard.touch_in
+      expect{ oystercard.touch_out }.to change{ oystercard.balance }.by(-Oystercard::MINIMUM_FARE)
     end
 
   end
