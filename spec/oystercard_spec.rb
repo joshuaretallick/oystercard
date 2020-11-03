@@ -41,7 +41,7 @@ describe Oystercard do
       expect(oystercard).not_to be_in_journey
     end
 
-    it "throws an error when touch_in if balance < 1" do
+    it "throws an error when touch_in if balance < MINIMUM_BALANCE" do
       expect{ oystercard.touch_in }.to raise_error "Insufficient Funds!"
     end
 
