@@ -4,11 +4,19 @@ require "station"
 describe Oystercard do
   subject(:oystercard) {described_class.new}
   let(:entry_station) { double :station }
+  let(:exit_station) { double :station }
 
     it 'stores the entry station in entry_station instance variable' do
-      subject.top_up(25)
-      subject.touch_in(entry_station)
-      expect(subject.entry_station).to eq(entry_station)
+      oystercard.top_up(25)
+      oystercard.touch_in(entry_station)
+      expect(oystercard.entry_station).to eq(entry_station)
+    end
+
+    it 'stores the exit station in exit_station instance variable' do
+      oystercard.top_up(25)
+      oystercard.touch_in(entry_station)
+      oystercard.touch_out(exit_station)
+      expect(oystercard.exit_station).to eq(exit_station)
     end
 
   context "Testing the functionality of the card" do
@@ -42,7 +50,7 @@ describe Oystercard do
     it "can touch out" do
       oystercard.top_up(2)
       oystercard.touch_in(entry_station)
-      oystercard.touch_out
+      oystercard.touch_out(exit_station)
       expect(oystercard).not_to be_in_journey
     end
 
@@ -53,18 +61,31 @@ describe Oystercard do
     it "deducts fare amount when user touches out" do
       oystercard.top_up(2)
       oystercard.touch_in(entry_station)
-      expect{ oystercard.touch_out }.to change{ oystercard.balance }.by(-Oystercard::MINIMUM_FARE)
+      expect{ oystercard.touch_out(exit_station) }.to change{ oystercard.balance }.by(-Oystercard::MINIMUM_FARE)
     end
 
     it "raises an exception if user hasn't touched in but tries to touch out" do
-      expect{ oystercard.touch_out }.to raise_error "You need to touch in first!"
+      expect{ oystercard.touch_out(exit_station) }.to raise_error "You need to touch in first!"
     end
 
     it "sets entry station to nil" do
-      subject.top_up(25)
-      subject.touch_in(entry_station)
-      subject.touch_out
+      oystercard.top_up(25)
+      oystercard.touch_in(entry_station)
+      oystercard.touch_out(exit_station)
       expect(subject.entry_station).to eq nil
+    end
+
+    it "stores the journeys history as an instance variable" do
+      expect(oystercard.trip_history).to be_empty
+    end
+
+    let(:trip_history) { { entry_station: entry_station, exit_station: exit_station} }
+
+    it "stores the trip history" do
+      oystercard.top_up(25)
+      oystercard.touch_in(entry_station)
+      oystercard.touch_out(exit_station)
+      expect(oystercard.trip_history).to include trip_history
     end
 
   end
