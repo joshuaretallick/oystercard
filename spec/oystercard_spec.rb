@@ -3,13 +3,13 @@ require "station"
 
 describe Oystercard do
   subject(:oystercard) {described_class.new}
-  let(:entry_station) { double :station }
-  let(:exit_station) { double :station }
+  let(:entry_station) { double :station } # eg Bank
+  let(:exit_station) { double :exit_station }
 
     it 'stores the entry station in entry_station instance variable' do
       oystercard.top_up(25)
       oystercard.touch_in(entry_station)
-      expect(oystercard.entry_station).to eq(entry_station)
+      expect(oystercard.entry_station).to eq(entry_station) 
     end
 
     it 'stores the exit station in exit_station instance variable' do
