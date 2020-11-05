@@ -1,10 +1,14 @@
 require 'station'
 
 describe Station do
-  subject(:station) {described_class.new}
+  subject(:station) {described_class.new("Bank", 1)}
 
-  it "returns an instance of its own" do
-    expect(subject).to be_instance_of(Station)
+  it "knows it name" do
+    expect(station.name).to eq("Bank")
+  end
+
+  it "knows its zone" do
+    expect(station.zone).to eq(1)
   end
 
 end
