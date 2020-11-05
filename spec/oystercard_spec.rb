@@ -5,6 +5,7 @@ describe Oystercard do
   subject(:oystercard) {described_class.new}
   let(:station) { double :double_station }
   let(:final_station) { double :double_final_station }
+  # could just as easily write let(:station) { "Brixton" }
 
     it 'stores the entry station in entry_station instance variable' do
       oystercard.top_up(25)
